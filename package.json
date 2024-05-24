@@ -1,5 +1,5 @@
 {
-  "name": "neuroflow-js",
+  "name": "@andypai/neuroflow",
   "version": "0.0.0-dev",
   "main": "src/index.js",
   "type": "module",
@@ -9,11 +9,7 @@
   "files": [
     "src"
   ],
-  "author": {
-    "name": "Andy Pai",
-    "email": "andy@r2pi.co",
-    "url": "https://andypai.me"
-  },
+  "author": "Andy Pai <andy@r2pi.co> (https://andypai.me)",
   "license": "MIT",
   "lint-staged": {
     "*.js": [
@@ -47,5 +43,20 @@
       "pre-commit": "lint-staged",
       "pre-push": "NO_TTY=true make test"
     }
-  }
+  },
+  "description": "simple neural network library inspired by karpathy/micrograd and tfjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abpai/neuroflow-js.git"
+  },
+  "keywords": [
+    "micrograd",
+    "autograd",
+    "neural",
+    "network"
+  ],
+  "bugs": {
+    "url": "https://github.com/abpai/neuroflow-js/issues"
+  },
+  "homepage": "https://github.com/abpai/neuroflow-js#readme"
 }

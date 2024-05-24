@@ -1,18 +1,25 @@
-# neuralflow-js
+# neuroflow
 
-Ever wanted to implement the [Linear](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear) layer from scratch? No? Well now you can!
+Ever wanted to implement the [Linear](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear) layer in PyTorch from scratch? No? Great, now you can!
 
-This project started as port of [karpathy/micrograd](https://github.com/karpathy/micrograd) to JavaScript for educational purposes. I've since tweaked the API to make it a useful foundation for reimplement for arbitrary parts of other libraries like PyTorch and TensorFlow and having a host module to execute it as part of a neural network.
+This project started as a port of [karpathy/micrograd](https://github.com/karpathy/micrograd) to JavaScript for educational purposes. The API has been tweaked to provide a useful foundation for reimplementing arbitrary parts of other libraries like PyTorch and TensorFlow, and it includes a host module to execute the code as part of a neural network.
 
-The library optimizes for readability and understanding and takes no performance considerations into account. As such, it is not useful for production applications but [tensorflow-js](https://www.tensorflow.org/js/guide) and others are already great for purpose.
+The library prioritizes readability and understanding, and does not take performance considerations into account. As such, it is not suitable for production applications. For production use cases, consider using libraries like [tensorflow-js](https://www.tensorflow.org/js/guide) instead.
+
+## Installation
+
+You can install neuroflow using npm:
+
+```bash
+npm install @andypai/neuroflow
+```
 
 ## Basic Usage
 
-Here's how you can train a simple neural network using the `Layer` and `Sequential` classes
+Here's an example of how you can train a simple neural network using the `Layer` and `Sequential` classes
 
 ```js
-import Sequential from './sequential.js'
-import Layer from './layer.js'
+import { Sequential, Layer } from 'neuroflow'
 
 // Specify the architecture
 const layer1 = new Layer({ numOfInputs: 3, numOfNeurons: 4 })
@@ -54,9 +61,9 @@ range(200).forEach(() => {
   })
 })
 
-model.forward([2.0, 3.0, -1.0]) // 1
+model.forward([2.0, 3.0, -1.0]) // Output: 1
 ```
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
