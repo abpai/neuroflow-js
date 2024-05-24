@@ -1,6 +1,6 @@
 {
   "name": "@andypai/neuroflow",
-  "version": "0.0.0-dev",
+  "version": "0.0.1-dev",
   "main": "src/index.js",
   "type": "module",
   "engines": {
