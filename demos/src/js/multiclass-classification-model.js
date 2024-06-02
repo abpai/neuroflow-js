@@ -1,10 +1,10 @@
 import { Sequential, Layer } from '@andypai/neuroflow'
 
 const buildModel = () => {
-  const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 16 })
-  const layer2 = new Layer({ numOfInputs: 16, numOfNeurons: 16 })
+  const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 10 })
+  const layer2 = new Layer({ numOfInputs: 10, numOfNeurons: 10 })
   const layer3 = new Layer({
-    numOfInputs: 16,
+    numOfInputs: 10,
     numOfNeurons: 3,
     activation: 'softmax',
   })

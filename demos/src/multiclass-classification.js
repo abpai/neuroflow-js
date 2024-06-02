@@ -67,7 +67,9 @@ class MultiClassClassification extends GameEngine {
       const [x, y] = point
       const label = labels[index]
       const color =
-        (label === 2 && '#3a7ca5') || (label === 1 && '#f6511d') || '#006632'
+        (label === 2 && '#3a7ca5') || // blue
+        (label === 1 && '#f6511d') || // orange
+        '#006632' // green
       this.drawCircle(this.mapX(x), this.mapY(y), 5, color)
     })
   }
@@ -82,9 +84,9 @@ class MultiClassClassification extends GameEngine {
         const prediction = this.model.forward([x, y])
         const label = oneHotDecode(prediction)
         const color =
-          (label === 2 && 'rgb(58 124 165 / 20%)') ||
-          (label === 1 && 'rgb(246 81 29 / 20%)') ||
-          'rgb(0 102 50 / 20%)'
+          (label === 2 && 'rgb(58 124 165 / 20%)') || // blue
+          (label === 1 && 'rgb(246 81 29 / 20%)') || // orange
+          'rgb(0 199 97 / 50%)' // green
         this.drawRectangle(
           this.mapX(x),
           this.mapY(y),
@@ -164,7 +166,7 @@ class MultiClassClassification extends GameEngine {
   train() {
     const [xs, ys] = this.trainingData
     let epoch = 0
-    let learningRate = 0.1
+    let learningRate = 0.5
     const alpha = 1e-4
     const batch = xs.length
 
@@ -190,7 +192,9 @@ class MultiClassClassification extends GameEngine {
 
       const totalLoss = dataLoss.add(regLoss)
 
-      const correct = ysb.filter((y, i) => oneHotDecode(y) === ys[i]).length
+      const correct = indices.filter(
+        (index, i) => oneHotDecode(yPredictions[i]) === ys[index],
+      ).length
       const accuracy = correct / yPredictions.length
 
       // Backward pass
@@ -228,8 +232,8 @@ class MultiClassClassification extends GameEngine {
   setup() {
     this.model = buildModel()
     this.trainingData = generateLinearData(
-      100,
-      (x, y) => (y < -2 * x + 0.5 && 1) || (y > -4 * x + 3 && 0) || 2,
+      150,
+      (x, y) => (y < -0.5 * x + 0.5 && 1) || (y > 0.75 && 2) || 0,
     )
     this.lossHistory = []
     this.training = true
