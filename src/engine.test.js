@@ -32,6 +32,28 @@ test('pow(): 3^3 to equal 27', () => {
   expect(three.pow(3).data).toBe(27)
 })
 
+test('exp(): e^x', () => {
+  const one = new Value(1)
+  const e = one.exp()
+  expect(e.data).toBeCloseTo(Math.exp(1))
+  expect(e.grad).toBe(0)
+
+  e.backward()
+  expect(one.grad).toBeCloseTo(Math.exp(1))
+  expect(e.grad).toBe(1)
+})
+
+test('log(): ln(x)', () => {
+  const e = new Value(Math.exp(1))
+  const log = e.log()
+  expect(log.data).toBeCloseTo(1)
+  expect(log.grad).toBe(0)
+
+  log.backward()
+  expect(e.grad).toBeCloseTo(1 / Math.exp(1))
+  expect(log.grad).toBeCloseTo(1)
+})
+
 test('relu()', () => {
   expect(new Value(-2).relu().data).toBe(0)
   expect(new Value(-1).relu().data).toBe(0)
@@ -68,6 +90,15 @@ test('chained expression', () => {
   expect(l.data).toBeCloseTo(-8)
 })
 
+test('Value.softmax()', () => {
+  const inputs = [1, 2, 3, 4, 1, 2, 3].map((v) => new Value(v))
+  const probs = Value.softmax(inputs).map((p) => p.data)
+  expect(probs[0]).toBeCloseTo(0.02364)
+  expect(probs[1]).toBeCloseTo(0.06426)
+  expect(probs[2]).toBeCloseTo(0.17468)
+  expect(probs[3]).toBeCloseTo(0.47483)
+})
+
 test('backward(): simple', () => {
   const a = new Value(2)
   const b = new Value(-3)
@@ -102,6 +133,28 @@ test('backward(): complex', () => {
   expect(y.data).toBeCloseTo(-20)
   expect(y.grad).toBeCloseTo(1)
   expect(x.grad).toBeCloseTo(46)
+})
+
+test('backward(): softmax', () => {
+  const logits = [1, 2, 3, 4].map((v) => new Value(v))
+  const probs = Value.softmax(logits)
+  const label = [0, 0, 0, 1]
+  const loss = probs
+    .map((p, j) => new Value(-label[j]).mul(p.log()))
+    .reduce((a, b) => a.add(b), new Value(0))
+
+  loss.backward()
+
+  expect(loss.data).toBeCloseTo(
+    -Math.log(
+      Math.exp(4) / (Math.exp(1) + Math.exp(2) + Math.exp(3) + Math.exp(4)),
+    ),
+  )
+
+  expect(logits[0].grad).toBeCloseTo(0.032058603)
+  expect(logits[1].grad).toBeCloseTo(0.0871443)
+  expect(logits[2].grad).toBeCloseTo(0.23688)
+  expect(logits[3].grad).toBeCloseTo(-0.356085)
 })
 
 test('against tensorflow', () => {

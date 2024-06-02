@@ -53,6 +53,17 @@ export default class Value {
     return this.mul(other.pow(-1))
   }
 
+  exp() {
+    const out = new Value(Math.exp(this.data), [this], 'exp')
+
+    const _backward = () => {
+      this.grad += out.data * out.grad
+    }
+    out._backward = _backward
+
+    return out
+  }
+
   pow(other) {
     if (typeof other !== 'number') {
       throw new Error('only supporting int/float powers for now')
@@ -61,6 +72,17 @@ export default class Value {
 
     const _backward = () => {
       this.grad += other * this.data ** (other - 1) * out.grad
+    }
+    out._backward = _backward
+
+    return out
+  }
+
+  log() {
+    const out = new Value(Math.log(this.data), [this], 'log')
+
+    const _backward = () => {
+      this.grad += (1 / this.data) * out.grad
     }
     out._backward = _backward
 
@@ -87,6 +109,28 @@ export default class Value {
     out._backward = _backward
 
     return out
+  }
+
+  static softmax(values) {
+    const expValues = values.map((val) => val.exp())
+    const sumExpValues = expValues.reduce((a, b) => a.add(b), new Value(0))
+    const outValues = expValues.map((expVal, i) => {
+      const out = expVal.div(sumExpValues)
+      const _backward = () => {
+        const softmaxVal = out.data
+        values.forEach((val, j) => {
+          if (i === j) {
+            val.grad += softmaxVal * (1 - softmaxVal) * out.grad
+          } else {
+            val.grad +=
+              -softmaxVal * (expValues[j].data / sumExpValues.data) * out.grad
+          }
+        })
+      }
+      out._backward = _backward
+      return out
+    })
+    return outValues
   }
 
   backward() {

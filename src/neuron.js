@@ -29,7 +29,7 @@ export default class Neuron extends Module {
 
     if (this.activation === 'relu') return activation.relu()
     if (this.activation === 'tanh') return activation.tanh()
-    if (this.activation === 'linear') return activation
+    if (['linear', 'softmax'].includes(this.activation)) return activation
     throw new Error(`Unsupported activation function: ${this.activation}`)
   }
 

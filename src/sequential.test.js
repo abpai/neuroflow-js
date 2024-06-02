@@ -53,7 +53,16 @@ test('#parameters', () => {
   )
 })
 
-test('train()', () => {
+test('#weights', () => {
+  const model = buildModel()
+  const weights = model.weights()
+  expect(weights.length).toBe(3)
+  expect(weights[0].length).toBe(3)
+  expect(weights[1].length).toBe(3)
+  expect(weights[2].length).toBe(1)
+})
+
+test('example training loop', () => {
   const range = (n) => [...Array(n).keys()]
   const model = buildModel()
 

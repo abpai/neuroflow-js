@@ -1,5 +1,6 @@
 import Module from './module.js'
 import Neuron from './neuron.js'
+import Value from './engine.js'
 
 export default class Layer extends Module {
   // Initializes a layer with a given number of inputs and outputs, and an activation function
@@ -13,12 +14,16 @@ export default class Layer extends Module {
         { length: numOfNeurons },
         () => new Neuron({ numOfInputs, activation }),
       )
+    this.activation = activation
   }
 
   // Performs the forward pass for the layer
   forward(inputs) {
     // Forward pass through each neuron
-    const outputs = this.neurons.map((neuron) => neuron.forward(inputs))
+    let outputs = this.neurons.map((neuron) => neuron.forward(inputs))
+
+    if (this.activation === 'softmax') outputs = Value.softmax(outputs)
+
     // Return a single output if there is only one neuron, otherwise return an array of outputs
     return outputs.length === 1 ? outputs[0] : outputs
   }
