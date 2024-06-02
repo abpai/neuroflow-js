@@ -32,12 +32,16 @@
     "serve": "^14.2.3",
     "wrangler": "^3.52.0"
   },
-  "engines": {
-    "node": ">=20.12.2"
-  },
   "dependencies": {
     "@andypai/neuroflow": "0.0.1",
     "mathjs": "12.4.2",
     "p5": "1.9.4"
-  }
+  },
+  "engines": {
+    "node": ">=20.12.2"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead"
+  ]
 }
