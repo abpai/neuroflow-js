@@ -1,0 +1,43 @@
+{
+  "name": "neuroflow.andypai.me",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "fix": "npm run lint -- --fix",
+    "parcel": "parcel",
+    "functions": "wrangler pages dev ./build --port 8080",
+    "pages": "parcel src/*.pug",
+    "start": "concurrently \"npm:functions\" \"npm:pages\"",
+    "build": "npm run clear && NODE_ENV=production parcel build src/*.pug --dist-dir build",
+    "deploy": "npm run build && wrangler pages deploy ./build",
+    "clear": "rm -rf ./build ./dist ./.parcel-cache",
+    "serve": "serve ./build"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "2.12.0",
+    "@parcel/transformer-pug": "2.12.0",
+    "@parcel/transformer-sass": "2.12.0",
+    "@parcel/transformer-webmanifest": "2.12.0",
+    "concurrently": "8.2.2",
+    "eslint": "8.46.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.9.0",
+    "eslint-plugin-flowtype": "8.0.3",
+    "eslint-plugin-import": "2.28.0",
+    "eslint-plugin-prettier": "5.0.0",
+    "parcel": "2.12.0",
+    "prettier": "3.0.0",
+    "serve": "^14.2.3",
+    "wrangler": "^3.52.0"
+  },
+  "engines": {
+    "node": ">=20.12.2"
+  },
+  "dependencies": {
+    "@andypai/neuroflow": "0.0.1",
+    "mathjs": "12.4.2",
+    "p5": "1.9.4"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "demos": [
+    {
+      "slug": "graphing-calculator",
+      "title": "Graphing Calculator & Function Approximation",
+      "description": "Plot a function f(x). Estimate the function using a neural network.",
+      "image": "https://static.andypai.me/neuroflow-graphing-calculator2.png"
+    },
+    {
+      "slug": "binary-classification",
+      "title": "Binary Classification using Hinge Loss",
+      "description": "Classify (x,y) points using a neural network.",
+      "image": "https://static.andypai.me/binary-classification.png"
+    },
+    {
+      "slug": "multiclass-classification",
+      "title": "Multiclass Classification using Softmax",
+      "description": "Classify (x,y) points into 3 or more classes using a neural network.",
+      "image": "https://static.andypai.me/multiclass-classification.png"
+    }
+  ]
+}

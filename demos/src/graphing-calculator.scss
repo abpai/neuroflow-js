@@ -1,0 +1,21 @@
+.fn {
+  display: flex;
+  align-items: center;
+
+  input {
+    flex: 1;
+    margin: 0 0.5em;
+  }
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8em;
+}
+
+#plane {
+  display: flex;
+  margin: 0 auto;
+}
