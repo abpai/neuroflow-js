@@ -1,0 +1,58 @@
+extends templates/layout
+
+block title
+  title Graphing Calculator - Neuroflow Demos
+
+block head
+  - const title = "neuroflow demo: graphing calculator"
+  - const description = "a graphing calculator that uses neuroflow neural network to learn the function of a user's input points."
+  - const url = 'https://neuroflow.andypai.me/graphing-calculator'
+  link(rel='stylesheet' href='graphing-calculator.scss')
+  meta(name='description' content=description)
+  meta(property='og:description' content=description)
+  meta(property='og:title' content=title)
+  meta(property='og:type' content='website')
+  meta(property='og:url' content=url)
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:description' content=description)
+  meta(name='twitter:title' content=title)
+  meta(property='twitter:domain' content='andypai.me')
+  meta(property='twitter:url' content=url)
+
+block prepend content
+  section
+    h1 Graphing Calculator
+    div.details
+      p A graphing calculator that uses neuroflow neural network to learn the function of a user's input points.
+
+  section.demo
+    form.fn
+      label(for='function') Enter a function f(x)=
+      input#fnInput(type='text' placeholder='sin(x)')
+      button(type='submit')#plot Plot
+    br
+    br
+    
+    .stats
+      span#epoch
+        span.label
+          b Epoch: 
+        span.value
+      span#loss
+        span.label
+          b Loss (MSE): 
+        span.value
+    
+    canvas#plane
+    br
+
+    .lossCurve
+      h4 Loss Curve
+      canvas#lossCurve
+    br
+
+    .model
+      h4 Model Architecture
+      .architecture
+
+  script(src='graphing-calculator.js' type='module' defer)

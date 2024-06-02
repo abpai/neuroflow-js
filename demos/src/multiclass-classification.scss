@@ -1,0 +1,18 @@
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8em;
+  max-width: 400px;
+  margin: 3rem auto -1rem;
+}
+
+#plane {
+  display: flex;
+  margin: 0 auto;
+}
+
+#lossCurve {
+  display: flex;
+  margin: 0 auto;
+}

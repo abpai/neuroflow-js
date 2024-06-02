@@ -1,0 +1,53 @@
+extends templates/layout
+
+block title
+  title Classify Labels - Neuroflow Demos
+
+block head
+  - const url = `https://neuroflow.andypai.me/${slug}`
+  link(rel='stylesheet' href='multiclass-classification.scss')
+  meta(name='description' content=description)
+  meta(property='og:description' content=description)
+  meta(property='og:title' content=title)
+  meta(property='og:type' content='website')
+  meta(property='og:url' content=url)
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:description' content=description)
+  meta(name='twitter:title' content=title)
+  meta(property='twitter:domain' content='andypai.me')
+  meta(property='twitter:url' content=url)
+
+block prepend content
+  section
+    h1 Multiclass Classification using Softmax
+    div.details
+      p Classify (x,y) points into 3 or more classes using a neural network. The model is trained to separate multiple classes of points using a multiclass classifier.
+
+  section.demo
+    .stats
+      span#epoch
+        span.label
+          b Epoch: 
+        span.value
+      span#loss
+        span.label
+          b Loss (CrossEntropy): 
+        span.value
+      span#accuracy
+        span.label
+          b Accuracy: 
+        span.value
+    
+    canvas#plane
+    br
+
+    .lossCurve
+      h4 Loss Curve
+      canvas#lossCurve
+    br
+
+    .model
+      h4 Model Architecture
+      .architecture
+
+  script(src='multiclass-classification.js' type='module' defer)

@@ -1,0 +1,58 @@
+extends templates/layout
+
+block title
+  title Classify 2D - Neuroflow Demos
+
+block head
+  - const url = `https://neuroflow.andypai.me/binary-classification`
+  link(rel='stylesheet' href='binary-classification.scss')
+  meta(name='description' content=description)
+  meta(property='og:description' content=description)
+  meta(property='og:title' content=title)
+  meta(property='og:type' content='website')
+  meta(property='og:url' content=url)
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:description' content=description)
+  meta(name='twitter:title' content=title)
+  meta(property='twitter:domain' content='andypai.me')
+  meta(property='twitter:url' content=url)
+
+block prepend content
+  section
+    h1 Binary Classification using Hinge Loss
+    div.details
+      p Classify (x,y) points using a neural network trained with the Hinge Loss function. The model is trained to separate two classes of points using a binary classifier.
+
+  section.demo
+    .types
+      button(type='button' data-pattern='circles') Circles
+      button(type='button' data-pattern='linear') Linear
+      button(type='button' data-pattern='spirals') Spirals
+
+    .stats
+      span#epoch
+        span.label
+          b Epoch: 
+        span.value
+      span#loss
+        span.label
+          b Loss (MaxMargin): 
+        span.value
+      span#accuracy
+        span.label
+          b Accuracy: 
+        span.value
+    
+    canvas#plane
+    br
+
+    .lossCurve
+      h4 Loss Curve
+      canvas#lossCurve
+    br
+
+    .model
+      h4 Model Architecture
+      .architecture
+
+  script(src='binary-classification.js' type='module' defer)

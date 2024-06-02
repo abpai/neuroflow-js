@@ -169,9 +169,11 @@ The full example is available [here](./src/examples/multiclass-classification.js
 
 ## Roadmap
 
+- [x] Regression
+- [x] Binary Classification
+- [x] Multi-class Classification
 - [ ] Autoencoder
 - [ ] Convolutional Neural Network (CNN)
-- [ ] Recurrent Neural Network (RNN)
 - [ ] Recurrent Neural Network (RNN)
 - [ ] Long Short-Term Memory (LSTM)
 - [ ] Bidirectional LSTM/GRU

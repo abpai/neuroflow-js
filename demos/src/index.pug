@@ -1,0 +1,52 @@
+extends templates/layout
+
+block title
+  title NeuroFlow Demos
+
+block head
+  - const title = "NeuroFlow Demos"
+  - const description = "hi! i'm andy pai, and here are some demos of NeuroFlow."
+  - const url = 'https://neuroflow.andypai.me'
+  link(rel='stylesheet' href='index.scss')
+  meta(name='description' content=description)
+  meta(property='og:description' content=description)
+  meta(property='og:title' content=title)
+  meta(property='og:type' content='website')
+  meta(property='og:url' content=url)
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:description' content=description)
+  meta(name='twitter:title' content=title)
+  meta(property='twitter:domain' content='andypai.me')
+  meta(property='twitter:url' content=url)
+
+block prepend content
+  section
+    h1 Welcome to NeuroFlow.js
+  p
+    | I created a JavaScript library called 
+    a(href="https://github.com/abpai/neuroflow-js") NeuroFlow
+    |  as a toy project to apply my understanding of neural networks while learning. You can get really far without actually understanding the mechanics of neural networks by using libraries like 
+    a(href="https://pytorch.org/") PyTorch
+    | , 
+    a(href="https://www.tensorflow.org/js") TensorFlow.js
+    | , and wrappers like 
+    a(href="https://docs.fast.ai/") fast.ai
+    | . However, this takes the "fun" out of training neural networks.
+
+  p
+    | The point of NeuroFlow is to 
+    a(href="https://en.wikipedia.org/wiki/RTFM") RTFM
+    |  (Read The F***ing Manual) in a sense by going to the source and reimplementing the key ideas behind these networks to better grasp all of their underlying mathematical glory, even if it is just with toy examples.
+
+  p Here are some demos of what this library can do so far:
+
+  section
+    h2 Demos
+    each demo in demos
+      h3 
+        a(href=`/${demo.slug}`)= demo.title
+      p= demo.description
+      a(href=`/${demo.slug}`)
+        .image(style=`background-image: url(${demo.image});`)
+      br
+      br
