@@ -1,18 +1,22 @@
 import { Sequential, Layer, Value } from '../index.js'
+import prng from '../utils/prng.js'
+
+const rand = prng(1337)
 
 // Specify the architecture
-const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 16 })
-const layer2 = new Layer({ numOfInputs: 16, numOfNeurons: 16 })
+const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 16, rand })
+const layer2 = new Layer({ numOfInputs: 16, numOfNeurons: 16, rand })
 const layer3 = new Layer({
   numOfInputs: 16,
   numOfNeurons: 3,
+  rand,
   activation: 'softmax',
 })
 const model = new Sequential({
   layers: [layer1, layer2, layer3],
 })
 
-const getRandomBetween = (low, high) => Math.random() * (high - low) + low
+const getRandomBetween = (low, high) => rand() * (high - low) + low
 
 const generateLinearData = (
   nSamples,
@@ -91,4 +95,4 @@ range(epochs).forEach((epoch) => {
   )
 })
 
-console.info(oneHotDecode(model.forward([0, 1]))) // Output: 1
+console.info(oneHotDecode(model.forward([0, 1])).data) // Output: 1

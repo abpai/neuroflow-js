@@ -1,11 +1,15 @@
 import { Sequential, Layer, Value } from '../index.js'
+import prng from '../utils/prng.js'
+
+const rand = prng(1337)
 
 // Specify the architecture
-const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 4 })
-const layer2 = new Layer({ numOfInputs: 4, numOfNeurons: 3 })
+const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 4, rand })
+const layer2 = new Layer({ numOfInputs: 4, numOfNeurons: 3, rand })
 const layer3 = new Layer({
   numOfInputs: 3,
   numOfNeurons: 1,
+  rand,
   activation: 'linear',
 })
 const model = new Sequential({
@@ -61,4 +65,4 @@ range(epochs).forEach((epoch) => {
   )
 })
 
-model.forward([1.0, 2.0]) // Output: 1
+console.info(model.forward([1.0, 2.0]).data) // Output: 1
