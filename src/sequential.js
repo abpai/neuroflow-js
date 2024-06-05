@@ -11,7 +11,11 @@ export default class Sequential extends Module {
   }
 
   forward(inputs) {
-    return this.layers.reduce((input, layer) => layer.forward(input), inputs)
+    const output = this.layers.reduce(
+      (input, layer) => layer.forward(input),
+      inputs,
+    )
+    return output
   }
 
   parameters() {
@@ -20,9 +24,10 @@ export default class Sequential extends Module {
 
   weights() {
     return this.layers.map((layer) =>
-      layer.neurons.map((neuron) =>
-        neuron.weights.map((n) => ({ data: n.data, grad: n.grad })),
-      ),
+      layer.neurons.map((neuron) => ({
+        weights: neuron.weights.map((w) => w.data),
+        bias: neuron.bias.data,
+      })),
     )
   }
 
