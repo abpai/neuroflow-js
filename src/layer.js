@@ -4,7 +4,13 @@ import Value from './engine.js'
 
 export default class Layer extends Module {
   // Initializes a layer with a given number of inputs and outputs, and an activation function
-  constructor({ numOfInputs, numOfNeurons, activation = 'relu', neurons }) {
+  constructor({
+    numOfInputs,
+    numOfNeurons,
+    activation = 'relu',
+    neurons,
+    rand = Math.random,
+  }) {
     super()
 
     // Create an array of neurons
@@ -12,7 +18,7 @@ export default class Layer extends Module {
       neurons ||
       Array.from(
         { length: numOfNeurons },
-        () => new Neuron({ numOfInputs, activation }),
+        () => new Neuron({ numOfInputs, activation, rand }),
       )
     this.activation = activation
   }
