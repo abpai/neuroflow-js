@@ -7,6 +7,7 @@ export default class Neuron extends Module {
     numOfInputs,
     activation = 'relu',
     weights,
+    bias = 0,
     rand = Math.random,
   }) {
     super()
@@ -14,8 +15,7 @@ export default class Neuron extends Module {
       weights ||
       // Randomly initialize weights between -1 and 1
       Array.from({ length: numOfInputs }, () => new Value(rand() * 2 - 1))
-
-    this.bias = new Value(0)
+    this.bias = new Value(bias)
     this.activation = activation
   }
 
@@ -26,7 +26,6 @@ export default class Neuron extends Module {
       (sum, weight, i) => sum.add(weight.mul(inputs[i])),
       this.bias,
     )
-
     if (this.activation === 'relu') return activation.relu()
     if (this.activation === 'tanh') return activation.tanh()
     if (['linear', 'softmax'].includes(this.activation)) return activation
