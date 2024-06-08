@@ -33,6 +33,7 @@
     "wrangler": "^3.52.0"
   },
   "dependencies": {
+    "@andypai/neuroflow": "0.0.2",
     "mathjs": "12.4.2",
     "p5": "1.9.4"
   },
