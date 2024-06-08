@@ -1,0 +1,86 @@
+extends templates/layout
+
+block title
+  title MNIST Classifier - Neuroflow Demos
+
+block head
+  - const url = `https://neuroflow.andypai.me/mnist-classification`
+  - const title = 'MNIST Classifier'
+  - const description = 'Classify handwritten digits from the MNIST dataset using a neural network.'
+  link(rel='stylesheet' href='mnist-classification.scss')
+  meta(name='description' content=description)
+  meta(property='og:description' content=description)
+  meta(property='og:title' content=title)
+  meta(property='og:type' content='website')
+  meta(property='og:url' content=url)
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:description' content=description)
+  meta(name='twitter:title' content=title)
+  meta(property='twitter:domain' content='andypai.me')
+  meta(property='twitter:url' content=url)
+
+block prepend content
+  section
+    h1 MNIST Classifier
+    div.details
+      p Classify handwritten digits from the MNIST dataset using a neural network. Note, the model starts with pre trained weights for the purpose of this demo.
+
+  section.train
+    h2 Training Set
+    .summary
+      .train-grid
+      .stats
+        div#epoch
+          span.label
+            b Epoch: 
+          span.value
+        div#loss
+          span.label
+            b Loss (CrossEntropy): 
+          span.value
+        div#accuracy
+          span.label
+            b Accuracy: 
+          span.value
+        div#learning-rate 
+          span.label
+            b Learning Rate: 
+          span.value
+        div#batch-size
+          span.label
+            b Batch Size: 
+          span.value
+        div#alpha
+          span.label
+            b Alpha: 
+          span.value
+        div#lambda
+          span.label
+            b Lambda (L2 Reg): 
+          span.value
+
+  section.lossCurve
+    h4 Loss Curve
+    canvas#lossCurve
+
+  section.test
+    h2 Test Set
+    .summary
+      .test-grid
+      .test-results
+        p Epoch 
+          b.epoch
+          |  correctly classified 
+          b.correct
+          |  of 
+          b.total
+          |  images. Accuracy of 
+          b.accuracy
+          |. Incorrect predictions summarized below:
+        .table
+
+  section.model
+    h3 Model Architecture
+    .architecture
+
+  script(src='mnist-classification.js' type='module' defer)

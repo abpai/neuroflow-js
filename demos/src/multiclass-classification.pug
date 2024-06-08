@@ -1,10 +1,12 @@
 extends templates/layout
 
 block title
-  title Classify Labels - Neuroflow Demos
+  title Multiclass Classification using Softmax - Neuroflow Demos
 
 block head
-  - const url = `https://neuroflow.andypai.me/${slug}`
+  - const url = `https://neuroflow.andypai.me/multiclass-classification`
+  - const title = 'Binary Classification using Hinge Loss'
+  - const description = 'Classify (x,y) points into 3 or more classes using a neural network.'
   link(rel='stylesheet' href='multiclass-classification.scss')
   meta(name='description' content=description)
   meta(property='og:description' content=description)

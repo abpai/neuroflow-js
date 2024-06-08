@@ -1,10 +1,12 @@
 extends templates/layout
 
 block title
-  title Classify 2D - Neuroflow Demos
+  title Binary Classification using Hinge Loss - Neuroflow Demos
 
 block head
   - const url = `https://neuroflow.andypai.me/binary-classification`
+  - const title = 'Binary Classification using Hinge Loss'
+  - const description = 'Classify (x,y) points using a neural network.'
   link(rel='stylesheet' href='binary-classification.scss')
   meta(name='description' content=description)
   meta(property='og:description' content=description)

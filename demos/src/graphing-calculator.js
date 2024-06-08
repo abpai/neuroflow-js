@@ -23,7 +23,7 @@ class GraphingCalculator extends GameEngine {
     this.training = false
     this.trainId = null
     this.drawId = null
-    this.maxEpochs = 100000
+    this.maxEpochs = 100
     this.trainingData = []
     this.lossHistory = []
 
@@ -147,18 +147,19 @@ class GraphingCalculator extends GameEngine {
   }
 
   train() {
-    let learningRate = 0.001
-    let step = 0
-    const decaySteps = 100
+    let learningRate = 0.01
+    let epoch = 0
+    const decaySteps = 10
     const decayRate = 0.99
     const [xs, ys] = this.trainingData
+    this.model.learningRate = learningRate
 
     const trainStep = () => {
       if (!this.training) return
 
       // forward pass
       const indices = range(0, xs.length).sort(() => Math.random() - 0.5)
-
+      const losses = []
       indices.forEach((j) => {
         const yPrediction = this.model.forward(xs[j])
         const loss = yPrediction.sub(ys[j]).pow(2)
@@ -171,18 +172,22 @@ class GraphingCalculator extends GameEngine {
         this.model.parameters().forEach((p) => {
           p.data -= learningRate * p.grad
         })
-
-        this.model.epoch = step * xs.length + j
-        this.model.loss = loss.data
-        this.lossHistory.push(loss.data)
+        losses.push(loss.data)
       })
 
-      if (step % decaySteps === 0) {
-        learningRate *= decayRate
+      if (epoch % decaySteps === 0) {
+        learningRate = (learningRate * decayRate).toFixed(4) || 0.0001
+        this.model.learningRate = learningRate
         console.info(`Updated learning rate: ${learningRate}`)
       }
 
-      step += 1
+      epoch += 1
+      const avgLoss = losses.reduce((acc, l) => acc + l, 0) / losses.length
+      this.model.epoch = epoch
+      this.model.loss = avgLoss
+      this.lossHistory.push(avgLoss)
+
+      if (epoch >= this.maxEpochs) return
       this.trainId = setTimeout(trainStep, 100)
     }
 
@@ -235,6 +240,7 @@ class GraphingCalculator extends GameEngine {
     )
     document.querySelector('#loss .value').innerText =
       this.model.loss.toFixed(5)
+    document.querySelector('#lr .value').innerText = this.model.learningRate
   }
 
   stop() {

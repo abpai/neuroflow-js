@@ -90,7 +90,7 @@ const drawNetwork = (p5, layers) => {
   layers.forEach((layer, layerIndex) => {
     const layerWidth = p5.width * 0.9
     const xOffset = (p5.width - layerWidth) / 2
-    const yOffset = layerHeight * layerIndex + layerHeight / 2
+    const yOffset = layerHeight * layerIndex + layerHeight / 2 + 70
     const neuronSpacing = layerWidth / (layer.length + 1)
     layer.forEach((neuron, neuronIndex) => {
       const neuronX = xOffset + neuronSpacing * (neuronIndex + 1)

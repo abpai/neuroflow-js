@@ -19,6 +19,7 @@ export default class GameEngine {
     height = 500,
     padding = 20,
     context = '2d',
+    fps = 60,
   }) {
     this.canvas = canvas
     this.ctx = this.canvas.getContext(context)
@@ -33,6 +34,7 @@ export default class GameEngine {
     this.innerWidth = this.width - 2 * this.padding
     this.innerHeight = this.height - 2 * this.padding
     this.drawId = null
+    this.fps = fps
   }
 
   setup() {}
@@ -53,9 +55,21 @@ export default class GameEngine {
   }
 
   tick() {
+    const startTime = Date.now()
+
     this.update()
     this.draw()
-    this.drawId = requestAnimationFrame(this.tick.bind(this))
+
+    const endTime = Date.now()
+    const deltaTime = endTime - startTime
+    const waitTime = 1000 / this.fps - deltaTime
+    if (waitTime > 0) {
+      setTimeout(() => {
+        this.drawId = requestAnimationFrame(this.tick.bind(this))
+      }, waitTime)
+    } else {
+      this.drawId = requestAnimationFrame(this.tick.bind(this))
+    }
   }
 
   eventClick(e) {

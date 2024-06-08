@@ -1,0 +1,39 @@
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.train-grid {
+  width: 232px;
+  min-height: 232px;
+  margin-right: 1rem;
+}
+
+.stats {
+  flex: 1;
+  font-size: 1rem;
+  min-width: 300px;
+}
+
+#lossCurve {
+  display: flex;
+  margin: 0 auto;
+}
+
+.test-grid {
+  margin-right: 1rem;
+}
+
+.table {
+  td {
+    padding: 0.5rem;
+
+    img {
+      margin: 0;
+    }
+  }
+}

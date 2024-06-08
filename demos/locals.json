@@ -1,6 +1,12 @@
 {
   "demos": [
     {
+      "slug": "mnist-classification",
+      "title": "MNIST Classifier",
+      "description": "Classify handwritten digits from the MNIST dataset using a neural network.",
+      "image": "https://static.andypai.me/mnist-classification.png"
+    },
+    {
       "slug": "graphing-calculator",
       "title": "Graphing Calculator & Function Approximation",
       "description": "Plot a function f(x). Estimate the function using a neural network.",
