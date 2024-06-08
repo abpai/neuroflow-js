@@ -2,20 +2,25 @@ import Module from './module.js'
 import Value from './engine.js'
 
 export default class Neuron extends Module {
-  // Initializes a neuron with a given number of inputs and an activation function
   constructor({
-    numOfInputs,
+    numOfInputs = 1,
     activation = 'relu',
+    initialization,
     weights,
     bias = 0,
     rand = Math.random,
   }) {
     super()
+
+    const initValue = () =>
+      initialization === 'he'
+        ? (rand() - 0.5) * Math.sqrt(2 / numOfInputs)
+        : rand() * 2 - 1
+
     this.weights =
       weights ||
-      // Randomly initialize weights between -1 and 1
-      Array.from({ length: numOfInputs }, () => new Value(rand() * 2 - 1))
-    this.bias = new Value(bias)
+      Array.from({ length: numOfInputs }, () => new Value(initValue()))
+    this.bias = new Value(bias === undefined ? initValue() : bias)
     this.activation = activation
   }
 
