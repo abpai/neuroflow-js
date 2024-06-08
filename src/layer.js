@@ -8,6 +8,7 @@ export default class Layer extends Module {
     numOfInputs,
     numOfNeurons,
     activation = 'relu',
+    initialization,
     neurons,
     rand = Math.random,
   }) {
@@ -18,7 +19,7 @@ export default class Layer extends Module {
       neurons ||
       Array.from(
         { length: numOfNeurons },
-        () => new Neuron({ numOfInputs, activation, rand }),
+        () => new Neuron({ numOfInputs, activation, rand, initialization }),
       )
     this.activation = activation
   }

@@ -5,7 +5,7 @@ import { Sequential, Layer, Value, utils } from '../index.js'
 const { prng, bootstrapModel, oneHot, crossEntropyLoss } = utils
 
 const uniqueLabels = 10
-const rand = Math.random || prng(1337)
+const rand = prng(1337)
 
 const range = (start, end) => {
   const length = end - start
@@ -43,7 +43,14 @@ const pct = new Intl.NumberFormat('en-US', {
   style: 'percent',
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
-})
+}).format
+
+const movingAvg = (history, lookBack = 10) =>
+  (
+    history
+      .slice(Math.max(0, history.length - lookBack), history.length)
+      .reduce((acc, l) => acc + l, 0) / lookBack
+  ).toFixed(5)
 
 // Specify the architecture
 const buildModel = (bootstrap) => {
@@ -54,17 +61,22 @@ const buildModel = (bootstrap) => {
     return model
   }
 
-  const layer1 = new Layer({ numOfInputs: 14 * 14, numOfNeurons: 20, rand })
+  const numOfInputs = 14 * 14
+  const numOfNeurons = 20
+  const initialization = 'he'
+  const layer1 = new Layer({ numOfInputs, numOfNeurons, rand, initialization })
   const layer2 = new Layer({
-    numOfInputs: 20,
-    numOfNeurons: 20,
+    numOfInputs: numOfNeurons,
+    numOfNeurons,
     rand,
+    initialization,
   })
   const layer3 = new Layer({
-    numOfInputs: 20,
+    numOfInputs: numOfNeurons,
     numOfNeurons: uniqueLabels,
     rand,
     activation: 'softmax',
+    initialization,
   })
   model = new Sequential({
     layers: [layer1, layer2, layer3],
@@ -83,9 +95,10 @@ const trainModel = (
   lambda,
 ) => {
   let lossLastEpoch = Infinity
+  const lossHistory = []
+  const accuracyHistory = []
 
   range(0, epochs).forEach((epoch) => {
-    let loss
     const shuffledIndices = range(0, xs.length).sort(() => rand() - 0.5)
     const batches = range(0, Math.ceil(xs.length / batchSize)).map((batch) =>
       shuffledIndices.slice(batch * batchSize, (batch + 1) * batchSize),
@@ -95,7 +108,7 @@ const trainModel = (
       const batchXs = batchIdx.map((idx) => xs[idx])
       const batchYs = batchIdx.map((idx) => ys[idx])
 
-      loss = new Value(0)
+      let loss = new Value(0)
       const predictions = []
 
       batchXs.forEach((x, j) => {
@@ -113,6 +126,8 @@ const trainModel = (
 
       // Add L2 regularization term to the loss
       loss = loss.add(l2Loss).div(batchSize)
+
+      model.zeroGrad()
       loss.backward()
 
       // Update model parameters in the opposite direction of the gradient
@@ -122,23 +137,28 @@ const trainModel = (
       })
 
       // Adjust learning rate
-      learningRate = +(learningRate * (1 - alpha)).toFixed(10) || 0.00000001
+      learningRate = +(learningRate * (1 - alpha)).toFixed(8) || 0.00000001
 
-      if (batchNumber % 10 === 0) {
-        const accuracy = predictions.reduce((acc, pred, j) => {
+      const accuracy =
+        predictions.reduce((acc, pred, j) => {
           const label = batchYs[j]
           const prediction = oneHot.decode(pred.map((v) => v.data))
           return acc + (label === prediction ? 1 : 0)
-        }, 0)
+        }, 0) / batchSize
 
+      lossHistory.push(loss.data)
+      accuracyHistory.push(accuracy)
+
+      if (batchNumber % 10 === 0) {
         console.info(
-          `Epoch: ${epoch + 1}.${batchNumber + 1}, Loss: ${loss.data}, Accuracy: ${pct.format(accuracy / batchSize)}, Learning Rate: ${learningRate}`,
+          `Epoch: ${epoch}.${batchNumber}, Avg Loss: ${movingAvg(lossHistory)}, Avg Accuracy: ${pct(movingAvg(accuracyHistory))}, Learning Rate: ${learningRate}`,
         )
       }
     })
 
-    if (epoch && lossLastEpoch > loss.data) writeWeights(model.weights())
-    lossLastEpoch = loss.data
+    if (epoch && lossLastEpoch > movingAvg(lossHistory))
+      writeWeights(model.weights())
+    lossLastEpoch = movingAvg(lossHistory)
   })
 }
 
@@ -153,16 +173,14 @@ const [xs, ys] = dataset.reduce(
   [[], []],
 )
 
-const learningRate = 0.01
-const alpha = 1e-3
-const epochs = 5
-const batchSize = 10
-const lambda = 0.01
+const epochs = 3
+const batchSize = 25
+const learningRate = 1
+const alpha = 1e-2
+const lambda = 1e-3
 
-const model = buildModel(true)
+const model = buildModel(false)
 trainModel(model, xs, ys, epochs, batchSize, learningRate, alpha, lambda)
-
-writeWeights(model.weights())
 
 let loss = new Value(0)
 const predictions = []
@@ -194,5 +212,5 @@ const accuracy = predictions.reduce((acc, pred, j) => {
 }, 0)
 
 console.info(
-  `Final, Loss: ${loss.data}, Accuracy: ${pct.format(accuracy / xst.length)}`,
+  `Final, Loss: ${loss.data}, Accuracy: ${pct(accuracy / xst.length)}`,
 )

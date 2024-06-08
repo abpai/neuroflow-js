@@ -267,10 +267,10 @@ class MNISTClassification extends GameEngine {
     const [xs, ys] = this.trainingData
 
     let epoch = 0
-    let learningRate = 0.01
-    const alpha = 1e-3
     const batchSize = 16
-    const lambda = 0.01
+    let learningRate = 0.25
+    const alpha = 1e-2
+    const lambda = 1e-3
     const uniqueLabels = 10
 
     const trainStep = () => {
@@ -303,6 +303,8 @@ class MNISTClassification extends GameEngine {
 
       // Add L2 regularization term to the loss
       loss = loss.add(l2Loss).div(batchSize)
+
+      this.model.zeroGrad()
       loss.backward()
 
       // Update model parameters in the opposite direction of the gradient
@@ -338,7 +340,10 @@ class MNISTClassification extends GameEngine {
 
       epoch += 1
 
-      if (epoch > this.maxEpochs) return
+      if (epoch > this.maxEpochs) {
+        this.stop()
+        return
+      }
       this.trainId = setTimeout(trainStep, 500)
     }
 
