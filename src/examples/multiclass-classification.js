@@ -4,10 +4,10 @@ import prng from '../utils/prng.js'
 const rand = prng(1337)
 
 // Specify the architecture
-const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 16, rand })
-const layer2 = new Layer({ numOfInputs: 16, numOfNeurons: 16, rand })
+const layer1 = new Layer({ numOfInputs: 2, numOfNeurons: 4, rand })
+const layer2 = new Layer({ numOfInputs: 4, numOfNeurons: 3, rand })
 const layer3 = new Layer({
-  numOfInputs: 16,
+  numOfInputs: 3,
   numOfNeurons: 3,
   rand,
   activation: 'softmax',
@@ -20,7 +20,7 @@ const getRandomBetween = (low, high) => rand() * (high - low) + low
 
 const generateLinearData = (
   nSamples,
-  fn = (x, y) => (y > 0.8 && 1) || (y > 0.5 && 0) || 2,
+  fn = (x, y) => (y > 0.8 && 2) || (y > 0.5 && 1) || 0,
 ) => {
   const data = []
   const labels = []
@@ -39,7 +39,7 @@ const [xs, ys] = generateLinearData(100)
 
 let learningRate = 1
 const alpha = 1e-4
-const epochs = 100
+const epochs = 150
 
 const oneHotEncode = (label, numClasses) => {
   const encoding = Array(numClasses).fill(0)
@@ -95,4 +95,5 @@ range(epochs).forEach((epoch) => {
   )
 })
 
-console.info(oneHotDecode(model.forward([0, 1])).data) // Output: 1
+const pred = model.forward([0, 1])
+console.info('Actual: 2 | Prediction: ', oneHotDecode(pred))
