@@ -30,9 +30,9 @@ block prepend content
     .summary
       .train-grid
       .stats
-        div#epoch
+        div#step
           span.label
-            b Epoch: 
+            b Step: 
           span.value
         div#loss
           span.label
@@ -68,8 +68,8 @@ block prepend content
     .summary
       .test-grid
       .test-results
-        p Epoch 
-          b.epoch
+        p Step 
+          b.step
           |  correctly classified 
           b.correct
           |  of 

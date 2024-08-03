@@ -1,4 +1,4 @@
-import range from './range'
+import range from './range.js'
 
 /*
  * Partially ported from simple game engine by Andrej Karpathy
@@ -45,12 +45,12 @@ export default class GameEngine {
 
   mouseClick(x, y) {}
 
-  start() {
+  async start() {
     this.canvas.width = this.width
     this.canvas.height = this.height
     this.canvas.addEventListener('click', this.eventClick.bind(this), false)
 
-    this.setup()
+    await this.setup()
     this.drawId = requestAnimationFrame(this.tick.bind(this))
   }
 

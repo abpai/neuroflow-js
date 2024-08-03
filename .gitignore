@@ -156,3 +156,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 play.js
+
+**/examples/weights/**/*.json

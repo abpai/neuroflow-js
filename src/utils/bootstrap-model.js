@@ -3,7 +3,7 @@ import Layer from '../layer.js'
 import Neuron from '../neuron.js'
 import Value from '../engine.js'
 
-const bootstrapModel = (structure, linearActivation = 'softmax') => {
+const bootstrapModel = (structure, activation = 'softmax') => {
   const model = new Sequential({
     layers: structure.map((layer, index) => {
       const isLast = index === structure.length - 1
@@ -13,10 +13,10 @@ const bootstrapModel = (structure, linearActivation = 'softmax') => {
             new Neuron({
               weights: weights.map((w) => new Value(w)),
               bias,
-              activation: isLast ? linearActivation : 'relu',
+              activation: isLast ? activation : 'relu',
             }),
         ),
-        activation: isLast ? linearActivation : 'relu',
+        activation: isLast ? activation : 'relu',
       })
     }),
   })

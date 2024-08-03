@@ -62,10 +62,24 @@ test('relu()', () => {
   expect(new Value(2).relu().data).toBe(2)
 })
 
+test('leakyRelu()', () => {
+  expect(new Value(-2).leakyRelu().data).toBe(-0.02)
+  expect(new Value(-1).leakyRelu().data).toBe(-0.01)
+  expect(new Value(0.5).leakyRelu().data).toBe(0.5)
+  expect(new Value(1).leakyRelu().data).toBe(1)
+  expect(new Value(2).leakyRelu().data).toBe(2)
+})
+
 test('tanh()', () => {
   expect(new Value(3).tanh().data).toBeCloseTo(Math.tanh(3))
   expect(new Value(0).tanh().data).toBeCloseTo(Math.tanh(0))
   expect(new Value(-3).tanh().data).toBeCloseTo(Math.tanh(-3))
+})
+
+test('sigmoid()', () => {
+  expect(new Value(3).sigmoid().data).toBeCloseTo(1 / (1 + Math.exp(-3)))
+  expect(new Value(0).sigmoid().data).toBe(0.5)
+  expect(new Value(-3).sigmoid().data).toBeCloseTo(1 / (1 + Math.exp(3)))
 })
 
 test('chained expression', () => {

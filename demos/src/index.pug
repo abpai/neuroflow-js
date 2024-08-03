@@ -22,23 +22,32 @@ block head
 block prepend content
   section
     h1 Welcome to NeuroFlow
-  p
-    | I created a JavaScript library called 
-    a(href="https://github.com/abpai/neuroflow-js") NeuroFlow
-    |  as a toy project to apply my understanding of neural networks while learning. You can get really far without actually understanding the mechanics of neural networks by using libraries like 
-    a(href="https://pytorch.org/") PyTorch
-    | , 
-    a(href="https://www.tensorflow.org/js") TensorFlow.js
-    | , and wrappers like 
-    a(href="https://docs.fast.ai/") fast.ai
-    | . However, this takes the "fun" out of training neural networks.
 
   p
-    | The point of NeuroFlow is to 
-    a(href="https://en.wikipedia.org/wiki/RTFM") RTFM
-    |  (Read The F***ing Manual) in a sense by going to the source and reimplementing the key ideas behind these networks to better grasp all of their underlying mathematical glory, even if it is just with toy examples.
+    | I created 
+    a(href="https://github.com/abpai/neuroflow-js", target="_blank", rel="noopener noreferrer") NeuroFlow
+    | , a JavaScript library, as an educational project to deepen my understanding of neural networks. It began as a simple JavaScript port of 
+    a(href="https://github.com/karpathy/micrograd", target="_blank", rel="noopener noreferrer") Andrej Karpathy's micrograd
+    | . While powerful libraries like 
+    a(href="https://pytorch.org/", target="_blank", rel="noopener noreferrer") PyTorch
+    |  and 
+    a(href="https://www.tensorflow.org/js", target="_blank", rel="noopener noreferrer") TensorFlow.js
+    | , and frameworks such as 
+    a(href="https://docs.fast.ai/", target="_blank", rel="noopener noreferrer") fast.ai
+    |  make neural networks accessible, they often abstract away the underlying mechanics.
 
-  p Here are some demos of what this little library can do so far:
+  p.purpose
+    | NeuroFlow embraces the 
+    a(href="https://en.wikipedia.org/wiki/RTFM", target="_blank", rel="noopener noreferrer") RTFM
+    |  philosophy by reimplementing core neural network concepts from scratch. This approach offers a deeper appreciation for the mathematical intricacies behind these networks, even when working with simpler examples.
+
+  p.comparison
+    | For a practical comparison, I've implemented many of these demos using both NeuroFlow and 
+    a(href="https://www.tensorflow.org/js", target="_blank", rel="noopener noreferrer") TensorFlow.js
+    | . You can explore the 
+    a(href="https://github.com/abpai/tensorflowjs.andypai.me", target="_blank", rel="noopener noreferrer") TensorFlow.js implementations here, as well as the 
+    a(href="https://tensorflowjs.andypai.me") demos from the project.
+    |  This provides an interesting contrast between a from-scratch approach and a professional-grade library.
 
   section
     h2 Demos
