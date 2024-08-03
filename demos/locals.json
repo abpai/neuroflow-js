@@ -4,13 +4,19 @@
       "slug": "mnist-classification",
       "title": "MNIST Classifier",
       "description": "Classify handwritten digits from the MNIST dataset using a neural network.",
-      "image": "https://static.andypai.me/mnist-classification.png"
+      "image": "https://static.andypai.me/mnist-classification2.png"
+    },
+    {
+      "slug": "mnist-autoencoder",
+      "title": "MNIST Autoencoder",
+      "description": "Reconstruct MNIST digits using an autoencoder.",
+      "image": "https://static.andypai.me/mnist-autoencoder.png"
     },
     {
       "slug": "graphing-calculator",
       "title": "Graphing Calculator & Function Approximation",
       "description": "Plot a function f(x). Estimate the function using a neural network.",
-      "image": "https://static.andypai.me/neuroflow-graphing-calculator2.png"
+      "image": "https://static.andypai.me/nf-graphing-calculator.png"
     },
     {
       "slug": "binary-classification",

@@ -4,14 +4,17 @@ const inputNeuronColor = '#3a7ca5'
 const reluNeuronColor = '#f6511d'
 const linearNeuronColor = '#006632'
 const softmaxNeuronColor = '#ffb400'
+const sigmoidNeuronColor = '#ffb400'
 
 const parseStructure = (structure) => {
   const layers = structure.match(/Layer of \[([^\]]+)\]/g).map((layer) => {
     const neurons = layer.match(
-      /(RELUNeuron|LINEARNeuron|SOFTMAXNeuron)\(\d+\)/g,
+      /(RELUNeuron|LINEARNeuron|SOFTMAXNeuron|SIGMOIDNeuron)\(\d+\)/g,
     )
     return neurons.map((neuron) => {
-      const type = neuron.match(/(RELUNeuron|LINEARNeuron|SOFTMAXNeuron)/)[0]
+      const type = neuron.match(
+        /(RELUNeuron|LINEARNeuron|SOFTMAXNeuron|SIGMOIDNeuron)/,
+      )[0]
       const count = +neuron.match(/\d+/)[0]
       return { type, count }
     })
@@ -38,6 +41,8 @@ const drawNeuron = (p5, x, y, type) => {
     p5.fill(softmaxNeuronColor)
   } else if (type === 'INPUTNeuron') {
     p5.fill(inputNeuronColor)
+  } else if (type === 'SigmoidNeuron') {
+    p5.fill(sigmoidNeuronColor)
   }
   p5.ellipse(x, y, 20, 20)
 }
@@ -80,6 +85,13 @@ const drawLegend = (p5, neuronTypes) => {
     p5.ellipse(legendX, currentY, 20, 20)
     p5.fill(0)
     p5.text('SOFTMAXNeuron', legendX + 30, currentY + 5)
+  }
+
+  if (neuronTypes.has('SIGMOIDNeuron')) {
+    p5.fill(sigmoidNeuronColor)
+    p5.ellipse(legendX, currentY, 20, 20)
+    p5.fill(0)
+    p5.text('SIGMOIDNeuron', legendX + 30, currentY + 5)
   }
 }
 

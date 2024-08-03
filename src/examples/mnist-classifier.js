@@ -1,43 +1,12 @@
-import fs from 'fs'
-import { join } from 'path'
 import { Sequential, Layer, Value, utils } from '../index.js'
+import datasets from './datasets/index.js'
+import weights from './weights/index.js'
 
-const { prng, bootstrapModel, oneHot, crossEntropyLoss } = utils
+const { prng, bootstrapModel, oneHot, crossEntropyLoss, movingAverage, range } =
+  utils
 
 const uniqueLabels = 10
 const rand = prng(1337)
-
-const range = (start, end) => {
-  const length = end - start
-  return Array.from({ length }, (_, i) => start + i)
-}
-
-const readWeights = () =>
-  fs.readFileSync(
-    join(import.meta.dirname, 'datasets', 'mnist', 'weights.json'),
-    'utf-8',
-  )
-
-const writeWeights = (weights) => {
-  console.info('Saving weights...')
-  fs.writeFileSync(
-    join(import.meta.dirname, 'datasets', 'mnist', 'weights.json'),
-    JSON.stringify(weights),
-    'utf-8',
-  )
-}
-
-const readTrainingDataset = () =>
-  fs.readFileSync(
-    join(import.meta.dirname, 'datasets', 'mnist', 'train.json'),
-    'utf-8',
-  )
-
-const readTestDataset = () =>
-  fs.readFileSync(
-    join(import.meta.dirname, 'datasets', 'mnist', 'test.json'),
-    'utf-8',
-  )
 
 const pct = new Intl.NumberFormat('en-US', {
   style: 'percent',
@@ -45,18 +14,11 @@ const pct = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 }).format
 
-const movingAvg = (history, lookBack = 10) =>
-  (
-    history
-      .slice(Math.max(0, history.length - lookBack), history.length)
-      .reduce((acc, l) => acc + l, 0) / lookBack
-  ).toFixed(5)
-
 // Specify the architecture
 const buildModel = (bootstrap) => {
   let model
   if (bootstrap) {
-    const layers = JSON.parse(readWeights())
+    const layers = weights.read('mnist-classifier')
     model = bootstrapModel(layers)
     return model
   }
@@ -133,7 +95,6 @@ const trainModel = (
       // Update model parameters in the opposite direction of the gradient
       model.parameters().forEach((param) => {
         param.data -= learningRate * param.grad
-        param.grad = 0
       })
 
       // Adjust learning rate
@@ -151,18 +112,18 @@ const trainModel = (
 
       if (batchNumber % 10 === 0) {
         console.info(
-          `Epoch: ${epoch}.${batchNumber}, Avg Loss: ${movingAvg(lossHistory)}, Avg Accuracy: ${pct(movingAvg(accuracyHistory))}, Learning Rate: ${learningRate}`,
+          `Epoch: ${epoch}.${batchNumber}, Avg Loss: ${movingAverage(lossHistory)}, Avg Accuracy: ${pct(movingAverage(accuracyHistory))}, Learning Rate: ${learningRate}`,
         )
       }
     })
 
-    if (epoch && lossLastEpoch > movingAvg(lossHistory))
-      writeWeights(model.weights())
-    lossLastEpoch = movingAvg(lossHistory)
+    if (epoch && lossLastEpoch > movingAverage(lossHistory))
+      weights.write('mnist-classifier', model.weights())
+    lossLastEpoch = movingAverage(lossHistory)
   })
 }
 
-const dataset = JSON.parse(readTrainingDataset())
+const dataset = datasets.read('mnist', 'train')
 const [xs, ys] = dataset.reduce(
   (prev, data) => {
     const { image, label } = data
@@ -185,7 +146,7 @@ trainModel(model, xs, ys, epochs, batchSize, learningRate, alpha, lambda)
 let loss = new Value(0)
 const predictions = []
 
-const testDataset = JSON.parse(readTestDataset())
+const testDataset = datasets.read('mnist', 'test')
 const [xst, yst] = testDataset.reduce(
   (prev, data) => {
     const { image, label } = data

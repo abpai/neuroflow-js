@@ -2,7 +2,7 @@ import { Value, utils } from '@andypai/neuroflow'
 
 import GameEngine from './js/game-engine.js'
 import range from './js/range.js'
-import buildModel from './js/mnist-model.js'
+import buildModel from './js/mnist-classification-model.js'
 import visualizeNetwork from './js/network-visualization.js'
 
 const size = Math.min(+document.querySelector('.train').offsetWidth, 600)
@@ -20,11 +20,11 @@ class MNISTClassification extends GameEngine {
     this.lossCanvas.setAttribute('width', size)
     this.lossCanvas.setAttribute('height', 200)
 
-    this.model = buildModel()
+    this.model = null
     this.training = false
     this.trainId = null
     this.drawId = null
-    this.maxEpochs = 100
+    this.maxSteps = 100
     this.trainingData = trainingData
     this.trainingBatch = []
     this.testData = testData
@@ -58,7 +58,7 @@ class MNISTClassification extends GameEngine {
     const maxLoss = Math.max(...lossHistory)
 
     lossHistory.forEach((loss, index) => {
-      const x = padding + (index / (this.maxEpochs - 1)) * plotWidth
+      const x = padding + (index / (this.maxSteps - 1)) * plotWidth
       const y = height - padding - (loss / maxLoss) * plotHeight
 
       if (index === 0) {
@@ -82,7 +82,7 @@ class MNISTClassification extends GameEngine {
     })
 
     lossHistoryAverage.forEach((avgLoss, index) => {
-      const x = padding + (index / (this.maxEpochs - 1)) * plotWidth
+      const x = padding + (index / (this.maxSteps - 1)) * plotWidth
       const y = height - padding - (avgLoss / maxLoss) * plotHeight
 
       if (index === 0) {
@@ -113,7 +113,7 @@ class MNISTClassification extends GameEngine {
     // Add x-axis label
     ctxLoss.fillStyle = '#100c09'
     ctxLoss.font = '12px Arial'
-    ctxLoss.fillText('Epochs', width / 2, height - padding / 4)
+    ctxLoss.fillText('Steps', width / 2, height - padding / 4)
 
     // Add y-axis label
     ctxLoss.save()
@@ -151,7 +151,7 @@ class MNISTClassification extends GameEngine {
   }
 
   plotTest() {
-    if (this.model.epoch % 10 !== 0) return
+    if (this.model.step % 10 !== 0) return
 
     let totalCorrect = 0
     const incorrect = []
@@ -190,7 +190,7 @@ class MNISTClassification extends GameEngine {
       ctx.strokeRect(xPos, yPos, this.scale, this.scale)
     })
 
-    document.querySelector('.test .summary .epoch').innerText = this.model.epoch
+    document.querySelector('.test .summary .step').innerText = this.model.step
     document.querySelector('.test .summary .correct').innerText = totalCorrect
     document.querySelector('.test .summary .total').innerText = xs.length
     document.querySelector('.test .summary .accuracy').innerText = percent(
@@ -266,7 +266,7 @@ class MNISTClassification extends GameEngine {
   train() {
     const [xs, ys] = this.trainingData
 
-    let epoch = 0
+    let step = 0
     const batchSize = 16
     let learningRate = 0.25
     const alpha = 1e-2
@@ -310,7 +310,6 @@ class MNISTClassification extends GameEngine {
       // Update model parameters in the opposite direction of the gradient
       this.model.parameters().forEach((param) => {
         param.data -= learningRate * param.grad
-        param.grad = 0
       })
 
       // Adjust learning rate
@@ -323,7 +322,7 @@ class MNISTClassification extends GameEngine {
           return acc + (label === prediction ? 1 : 0)
         }, 0) / batchSize
 
-      this.model.epoch = epoch
+      this.model.step = step
       this.model.loss = loss.data
       this.model.accuracy = accuracy
       this.model.learningRate = learningRate
@@ -333,14 +332,14 @@ class MNISTClassification extends GameEngine {
       this.lossHistory.push(loss.data)
 
       console.info(
-        `Epoch: ${epoch}, Loss: ${loss.data.toFixed(5)}, Accuracy: ${percent(
+        `Step: ${step}, Loss: ${loss.data.toFixed(5)}, Accuracy: ${percent(
           accuracy,
         )}, Learning Rate: ${learningRate.toFixed(5)}`,
       )
 
-      epoch += 1
+      step += 1
 
-      if (epoch > this.maxEpochs) {
+      if (step > this.maxSteps) {
         this.stop()
         return
       }
@@ -350,8 +349,8 @@ class MNISTClassification extends GameEngine {
     trainStep()
   }
 
-  setup() {
-    this.model = buildModel()
+  async setup() {
+    this.model = await buildModel()
     this.lossHistory = []
     this.training = true
     this.train()
@@ -370,8 +369,8 @@ class MNISTClassification extends GameEngine {
       maximumFractionDigits: 0,
     })
 
-    document.querySelector('#epoch .value').innerText = formatter.format(
-      this.model.epoch,
+    document.querySelector('#step .value').innerText = formatter.format(
+      this.model.step,
     )
     document.querySelector('#loss .value').innerText =
       this.model.loss?.toFixed(5)

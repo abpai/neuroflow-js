@@ -87,6 +87,7 @@ export default class Value {
     return out
   }
 
+  // range 0 to 1
   relu() {
     const out = new Value(this.data < 0 ? 0 : this.data, [this], 'ReLU')
 
@@ -97,6 +98,22 @@ export default class Value {
     return out
   }
 
+  // range 0 to 1
+  leakyRelu(alpha = 1e-2) {
+    const out = new Value(
+      this.data < 0 ? alpha * this.data : this.data,
+      [this],
+      'LeakyReLU',
+    )
+
+    out._backward = () => {
+      this.grad = this.data > 0 ? out.grad : alpha * out.grad
+    }
+
+    return out
+  }
+
+  // range -1 to 1
   tanh() {
     const t = (Math.exp(2 * this.data) - 1) / (Math.exp(2 * this.data) + 1)
     const out = new Value(t, [this], 'tanh')
@@ -107,6 +124,18 @@ export default class Value {
     return out
   }
 
+  // range 0 to 1
+  sigmoid() {
+    const out = new Value(1 / (1 + Math.exp(-this.data)), [this], 'sigmoid')
+
+    out._backward = () => {
+      this.grad += out.data * (1 - out.data) * out.grad
+    }
+
+    return out
+  }
+
+  // sum 0 to 1
   static softmax(values) {
     const maxVal = Math.max(...values.map((val) => val.data))
     const expValues = values.map((val) => val.sub(maxVal).exp())

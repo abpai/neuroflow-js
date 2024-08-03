@@ -1,0 +1,71 @@
+extends templates/layout
+
+block title
+  title MNIST Autoencoder - Neuroflow Demos
+
+block head
+  - const url = `https://neuroflow.andypai.me/mnist-autoencoder`
+  - const title = 'MNIST Autoencoder'
+  - const description = 'Autoencoder to compress and reconstruct handwritten digits from the MNIST dataset.'
+  link(rel='stylesheet' href='mnist-autoencoder.scss')
+  meta(name='description' content=description)
+  meta(property='og:description' content=description)
+  meta(property='og:title' content=title)
+  meta(property='og:type' content='website')
+  meta(property='og:url' content=url)
+  meta(name='twitter:card' content='summary_large_image')
+  meta(name='twitter:description' content=description)
+  meta(name='twitter:title' content=title)
+  meta(property='twitter:domain' content='andypai.me')
+  meta(property='twitter:url' content=url)
+
+block prepend content
+  section
+    h1 MNIST Autoencoder
+    div.details
+      p Autoencoder to compress and reconstruct handwritten digits from the MNIST dataset. Note, the model starts with pre trained weights for the purpose of this demo.
+
+  section.explanation
+    h2 How It Works
+    p This demo showcases a pre-trained autoencoder neural network that compresses MNIST digit images down to a compact latent representation of just 49 dimensions, before reconstructing them. Here's the process:
+    ol
+      li The original 14x14 pixel image (196 dimensions) is fed into the encoder.
+      li The encoder compresses the image to a 98-dimensional latent space representation.
+      li The decoder then attempts to reconstruct the original image from this compact representation.
+      li The result is displayed alongside the original for comparison.
+    p This technique is useful for dimensionality reduction, feature learning, and potentially generating new digit images.
+
+  section.demo
+    section.test
+      h2 Test Set Demonstration
+      p.instructions The demo will cycle through different test images.
+
+      h3 Select an activation function
+      p Models trained with different activation functions are available to compare. Each model was trained for 20,000 steps with the same hyperparameters.
+
+      .activation
+        label
+          input(type='radio' name='activation' value='leakyRelu' checked)
+          | Leaky ReLU
+        label
+          input(type='radio' name='activation' value='relu')
+          | ReLU
+        label
+          input(type='radio' name='activation' value='sigmoid')
+          | Sigmoid
+
+      .summary
+        table.table
+          tr
+            th Original Image
+            th Reconstructed Image
+          tr
+            td#original
+            td#reconstructed
+
+    .model
+      h3 Model Architecture
+      p The autoencoder consists of an encoder network that compresses the input, and a decoder network that reconstructs it.
+      #architecture
+
+  script(src='mnist-autoencoder.js' type='module' defer)
