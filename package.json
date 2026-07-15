@@ -9,7 +9,7 @@
   "files": [
     "src"
   ],
-  "author": "Andy Pai <andy@r2pi.co> (https://andypai.me)",
+  "author": "Andy Pai <andy@r2pi.co> (https://andyp.ai)",
   "license": "MIT",
   "lint-staged": {
     "*.js": [

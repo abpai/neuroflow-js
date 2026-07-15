@@ -7,7 +7,7 @@ NeuroFlow is a JavaScript library that allows you to implement neural network la
 
 This project started as a port of [karpathy/micrograd](https://github.com/karpathy/micrograd) to JavaScript for educational purposes. The API has been tweaked to prioritize readability and understanding, making it suitable for learning and experimentation. However, it does not take performance considerations into account and is not recommended for production applications. For production use cases, consider using libraries like [TensorFlow.js](https://www.tensorflow.org/js/guide) instead.
 
-Demos: https://neuroflow.andypai.me/
+Demos: https://neuroflow.andyp.ai/
 
 ## Installation
 
